@@ -1,6 +1,9 @@
 """
 This scripts used graph_tool to generate the data which will be compared to
-  the ones obtained with edgelist_perco_t.
+  the ones obtained with edgelist_perco_t, namely
+  - get_nb_components
+  - get_size_largest_perco_component
+  - get_size_second_largest_perco_component
 
 Copyright (C) 2020  Antoine Allard (antoineallard.info)
 
@@ -21,7 +24,7 @@ import graph_tool.all as gt
 import numpy as np
 
 # Number of vertices
-nb_vertices = 2500
+nb_vertices = 250
 
 # Expected average degree
 expected_average_degree = 5
@@ -40,17 +43,37 @@ with open("validation_edgelist.dat", "ab") as f:
                fmt="%15s", delimiter=" ",
                header=" SourceVertex    TargetVertex")
 
-# Gets the edge list
-edges = g.get_edges()
-nb_edges = len(edges)
-with open("validation_raw_results.dat", "w" )as f:
+with open("validation_raw_results.dat", "w" ) as f:
 
-    for i in range(200):
-        np.random.shuffle(g.get_edges())
-        sizes1, comp = gt.edge_percolation(g, edges)
-        sizes2, comp = gt.edge_percolation(g, edges, second=True)
+    # g.set_fast_edge_removal(True)
+    f.write('#       nb_edges     size_largest size_2nd_largest            ncomp\n')
 
-        np.savetxt(f, np.column_stack((range(1, nb_edges + 1), sizes1, sizes2)),
+    for i in range(2):
+
+        g2 = g.copy()
+        g2.set_fast_edge_removal(fast=True)
+        edges = g2.get_edges()
+        nb_edges = len(edges)
+        # np.random.shuffle(edges)
+
+        ncomp = np.zeros(nb_edges + 1)
+        size1 = np.zeros(nb_edges + 1)
+        size2 = np.zeros(nb_edges + 1)
+
+        comps = sorted(gt.label_components(g2)[1], reverse=True)
+        ncomp[0] = len(comps)
+        size1[0] = comps[0]
+        if ncomp[0] > 1:
+             size2[0] = comps[1]
+
+        for e in np.arange(0, nb_edges, 1):
+            g2.remove_edge(g2.edge(edges[e][0], edges[e][1]))
+            comps = sorted(gt.label_components(g2)[1], reverse=True)
+            ncomp[e+1] = len(comps)
+            size1[e+1] = comps[0]
+            if ncomp[e+1] > 1:
+                 size2[e+1] = comps[1]
+
+        np.savetxt(f, np.column_stack((range(nb_edges + 1, 0, -1), size1, size2, ncomp)),
                    delimiter=' ', encoding='utf-8',
-                   fmt='%20d %20d %20d ',
-                   header='          nb_edges         size_largest  size_second_largest')
+                   fmt='%16d %16d %16d %16d ')
