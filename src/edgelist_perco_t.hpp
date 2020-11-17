@@ -67,7 +67,7 @@ namespace pgl
       // Loads the data.
       void load_edgelist(std::string edgelist_filename);
       // Generates a random edgelist where each edge is preserved with probability T.
-      void generate_random_edgelist(double T);
+      void generate_random_adjacency_list(double T);
       // Find the size of all clusters.
       void find_dist_clust_size();
     public:
@@ -188,7 +188,7 @@ void pgl::edgelist_perco_t::load_edgelist(std::string edgelist_filename)
 
 // =================================================================================================
 // =================================================================================================
-int pgl::edgelist_perco_t::generate_random_edgelist(double T)
+int pgl::edgelist_perco_t::generate_random_adjacency_list(double T)
 {
   // Variables.
   int v1, v2;
@@ -373,7 +373,7 @@ int pgl::edgelist_perco_t::get_size_second_largest_perco_component()
 int pgl::edgelist_perco_t::bond_percolate(double T)
 {
   // Loads the percolated edgelist.
-  int nb_edges = generate_random_edgelist(T);
+  int nb_edges = generate_random_adjacency_list(T);
   // Finds the distribution of the size of components.
   find_dist_clust_size();
   // Returns the number of remaining edges.
