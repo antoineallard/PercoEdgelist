@@ -11,7 +11,7 @@
  *  Date:    November 2020
  *
  *
- *  Copyright (C) 2019 Antoine Allard
+ *  Copyright (C) 2020 Antoine Allard
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,11 +43,21 @@
   std::ofstream output_file("validation_edgelist_perco_t.dat");
 
   // column width in the output file.
-  width = 15;
+  int width = 15;
 
   // Parameters of the simulations
-  int nb_simulations = 100;
+  int nb_simulations = 1000;
   double dt = 0.05;
+
+  // Writes the header.
+  output_file << "#";
+  output_file << std::setw(width - 1) << "edge_prob" << " ";
+  output_file << std::setw(width) << "nb_vertices" << " ";
+  output_file << std::setw(width) << "nb_edges" << " ";
+  output_file << std::setw(width) << "size_1st" << " ";
+  output_file << std::setw(width) << "size_2nd" << " ";
+  output_file << std::setw(width) << "nb_comp" << " ";
+  output_file << std::endl;
 
   // Loads the random edgelist.
   agl::edgelist_perco_t g("validation_edgelist.dat");

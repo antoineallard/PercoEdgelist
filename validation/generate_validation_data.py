@@ -38,7 +38,7 @@ def sample_deg():
 g = gt.random_graph(nb_vertices, sample_deg, directed=False)
 
 # Saves the graph as an edgelist.
-with open("validation_edgelist.dat", "ab") as f:
+with open("validation_edgelist.dat", "wb") as f:
     np.savetxt(f, g.get_edges(),
                fmt="%15s", delimiter=" ",
                header=" SourceVertex    TargetVertex")
@@ -48,7 +48,7 @@ with open("validation_raw_results.dat", "w" ) as f:
     # g.set_fast_edge_removal(True)
     f.write('#   nb_vertices        nb_edges        size_1st        size_2nd         nb_comp\n')
 
-    for i in range(25):
+    for i in range(250):
 
         g2 = g.copy()
         g2.set_fast_edge_removal(fast=True)
