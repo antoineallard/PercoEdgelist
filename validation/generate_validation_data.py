@@ -46,7 +46,7 @@ with open("validation_edgelist.dat", "ab") as f:
 with open("validation_raw_results.dat", "w" ) as f:
 
     # g.set_fast_edge_removal(True)
-    f.write('#   nb_edges     size_1st     size_2nd      nb_comp\n')
+    f.write('#   nb_vertices        nb_edges        size_1st        size_2nd         nb_comp\n')
 
     for i in range(25):
 
@@ -74,6 +74,6 @@ with open("validation_raw_results.dat", "w" ) as f:
             if ncomp[e+1] > 1:
                  size2[e+1] = comps[1]
 
-        np.savetxt(f, np.column_stack((range(nb_edges, -1, -1), size1, size2, ncomp)),
+        np.savetxt(f, np.column_stack((np.ones((nb_edges + 1, 1)) * nb_vertices, range(nb_edges, -1, -1), size1, size2, ncomp)),
                    delimiter=' ', encoding='utf-8',
-                   fmt='%16d %16d %16d %16d ')
+                   fmt='%15d %15d %15d %15d %15d ')
