@@ -67,7 +67,7 @@ namespace agl
       // Loads the data.
       void load_edgelist(std::string edgelist_filename);
       // Generates a random edgelist where each edge is preserved with probability T.
-      void generate_random_adjacency_list(double T);
+      int generate_random_adjacency_list(double T);
       // Find the size of all clusters.
       void find_dist_clust_size();
     public:
