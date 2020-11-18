@@ -1,5 +1,5 @@
 """
-This scripts used graph_tool to generate the data which will be compared to
+This scripts uses graph_tool to generate the data which will be compared to
   the ones obtained with edgelist_perco_t, namely
   - get_nb_components
   - get_size_largest_perco_component
@@ -46,15 +46,15 @@ with open("validation_edgelist.dat", "ab") as f:
 with open("validation_raw_results.dat", "w" ) as f:
 
     # g.set_fast_edge_removal(True)
-    f.write('#       nb_edges     size_largest size_2nd_largest            ncomp\n')
+    f.write('#   nb_edges     size_1st     size_2nd      nb_comp\n')
 
-    for i in range(2):
+    for i in range(25):
 
         g2 = g.copy()
         g2.set_fast_edge_removal(fast=True)
         edges = g2.get_edges()
         nb_edges = len(edges)
-        # np.random.shuffle(edges)
+        np.random.shuffle(edges)
 
         ncomp = np.zeros(nb_edges + 1)
         size1 = np.zeros(nb_edges + 1)
@@ -74,6 +74,6 @@ with open("validation_raw_results.dat", "w" ) as f:
             if ncomp[e+1] > 1:
                  size2[e+1] = comps[1]
 
-        np.savetxt(f, np.column_stack((range(nb_edges + 1, 0, -1), size1, size2, ncomp)),
+        np.savetxt(f, np.column_stack((range(nb_edges, -1, -1), size1, size2, ncomp)),
                    delimiter=' ', encoding='utf-8',
                    fmt='%16d %16d %16d %16d ')
