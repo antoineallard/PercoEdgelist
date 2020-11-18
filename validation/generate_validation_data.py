@@ -24,7 +24,7 @@ import graph_tool.all as gt
 import numpy as np
 
 # Number of vertices
-nb_vertices = 250
+nb_vertices = 1000
 
 # Expected average degree
 expected_average_degree = 5
@@ -48,7 +48,7 @@ with open("validation_raw_results.dat", "w" ) as f:
     # g.set_fast_edge_removal(True)
     f.write('#   nb_vertices        nb_edges        size_1st        size_2nd         nb_comp\n')
 
-    for i in range(250):
+    for i in range(500):
 
         g2 = g.copy()
         g2.set_fast_edge_removal(fast=True)
