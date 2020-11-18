@@ -34,8 +34,9 @@ def sample_deg():
     return np.random.poisson(expected_average_degree)
 
 
-# Generates a graph
+# Generates a graph.
 g = gt.random_graph(nb_vertices, sample_deg, directed=False)
+g = gt.extract_largest_component(g, prune=True)
 
 # Saves the graph as an edgelist.
 with open("validation_edgelist.dat", "wb") as f:
@@ -48,7 +49,7 @@ with open("validation_raw_results.dat", "w" ) as f:
     # g.set_fast_edge_removal(True)
     f.write('#   nb_vertices        nb_edges        size_1st        size_2nd         nb_comp\n')
 
-    for i in range(500):
+    for i in range(1000):
 
         g2 = g.copy()
         g2.set_fast_edge_removal(fast=True)
@@ -74,6 +75,6 @@ with open("validation_raw_results.dat", "w" ) as f:
             if ncomp[e+1] > 1:
                  size2[e+1] = comps[1]
 
-        np.savetxt(f, np.column_stack((np.ones((nb_edges + 1, 1)) * nb_vertices, range(nb_edges, -1, -1), size1, size2, ncomp)),
+        np.savetxt(f, np.column_stack((np.ones((nb_edges + 1, 1)) * g.num_vertices(), range(nb_edges, -1, -1), size1, size2, ncomp)),
                    delimiter=' ', encoding='utf-8',
                    fmt='%15d %15d %15d %15d %15d ')

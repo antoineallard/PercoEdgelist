@@ -47,7 +47,7 @@
 
   // Parameters of the simulations
   int nb_simulations = 10000;
-  double dt = 0.05;
+  double dt = 0.01;
 
   // Writes the header.
   output_file << "#";
