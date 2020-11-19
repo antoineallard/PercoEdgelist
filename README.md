@@ -50,9 +50,34 @@ agl::edgelist_perco_t g("<path-to-edgelist-file>");
 ```c++
 // Generates an instance of the original graph in which each edge has been
 //   removed with probability 1 - 0.6.
-int number_of_edges = g.bond_percolate(0.6);
+int number_of_remaining_edges = g.bond_percolate(0.6);
 // and returns the number of edges that have not been removed.
 ```
 
 
 #### Properties of the percolated edgelist
+
+Once a percolated instance has been generated, various properties can be extracted
+
+```c++
+// Size of the connected component to which vertex "v" belongs.
+int component_size = g.get_component_size(v);
+
+// Number of connected components.
+int nb_components = g.get_nb_components();
+
+// Number of vertices in the graph.
+int nb_vertices = g.get_nb_vertices();
+
+// Returns the numerical ID of a randomly chosen vertex.
+int v = g.get_random_vertex();
+
+// Size of the largest connected component.
+int size_largest_perco_component = g.get_size_largest_perco_component();
+
+// Size of the component to which a random vertex belongs.
+int size_random_perco_component = g.get_size_random_perco_component();
+
+// Size of the second largest connected component.
+int size_second_largest_perco_component = g.get_size_second_largest_perco_component();
+```
