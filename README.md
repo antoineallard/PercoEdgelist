@@ -12,11 +12,7 @@ The class can be imported directly and os available under the namepace `agl`.
 The currently available functions are
 * [Importing a graph from an edgelist file](#importing-a-graph-from-an-edgelist-file)
 * [Generating one instance of a bond percolated graph](#generating-one-instance-of-a-bond-percolated-edgelist)
-* Properties of the percolated graph
-  - Total number of (remaining) vertices
-  - Number of clusters.
-  - Size (number of clusters) of the largest cluster.
-  - Size of the cluster to which belongs a randomly chosen vertex.
+* [Properties of the percolated graph](#properties-of-the-percolated-edgelist)
 
 
 #### Importing a graph from an edgelist file
