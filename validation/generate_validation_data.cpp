@@ -60,7 +60,7 @@
   output_file << std::endl;
 
   // Loads the random edgelist.
-  agl::edgelist_perco_t g("validation_edgelist.dat");
+  pgl::edgelist_perco_t g("validation_edgelist.dat");
 
   // Performs several bond percolation simulations for each shuffled graph.
   for(int m(0), nb_edges; m<nb_simulations; ++m)

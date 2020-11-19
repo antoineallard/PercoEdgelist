@@ -43,7 +43,7 @@
 #include <vector>    // std::vector
 
 
-namespace agl
+namespace pgl
 {
   class edgelist_perco_t
   {
@@ -95,7 +95,7 @@ namespace agl
 
 // =================================================================================================
 // =================================================================================================
-agl::edgelist_perco_t::edgelist_perco_t(std::string edgelist_filename)
+pgl::edgelist_perco_t::edgelist_perco_t(std::string edgelist_filename)
 {
   // Initializes the random number generator.
   engine.seed(std::time(NULL));
@@ -106,7 +106,7 @@ agl::edgelist_perco_t::edgelist_perco_t(std::string edgelist_filename)
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::bond_percolate(double T)
+int pgl::edgelist_perco_t::bond_percolate(double T)
 {
   // Loads the percolated edgelist.
   int nb_edges = generate_random_adjacency_list(T);
@@ -119,7 +119,7 @@ int agl::edgelist_perco_t::bond_percolate(double T)
 
 // =================================================================================================
 // =================================================================================================
-void agl::edgelist_perco_t::find_dist_clust_size()
+void pgl::edgelist_perco_t::find_dist_clust_size()
 {
   // Initializes the containers.
   dist_clust_size.clear();
@@ -151,7 +151,7 @@ void agl::edgelist_perco_t::find_dist_clust_size()
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::generate_random_adjacency_list(double T)
+int pgl::edgelist_perco_t::generate_random_adjacency_list(double T)
 {
   // Variables.
   int v1, v2;
@@ -185,7 +185,7 @@ int agl::edgelist_perco_t::generate_random_adjacency_list(double T)
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_component_size(int v)
+int pgl::edgelist_perco_t::get_component_size(int v)
 {
   // Returns the size of the component to which vertex "v" belongs.
   return dist_clust_size[get_root(v)];
@@ -194,7 +194,7 @@ int agl::edgelist_perco_t::get_component_size(int v)
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_nb_components()
+int pgl::edgelist_perco_t::get_nb_components()
 {
   // Counts the number of components whose "size is not zero".
   int nb_components = 0;
@@ -212,7 +212,7 @@ int agl::edgelist_perco_t::get_nb_components()
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_random_vertex()
+int pgl::edgelist_perco_t::get_random_vertex()
 {
   return (int) (uniform_01(engine) * nb_vertices);
 }
@@ -220,7 +220,7 @@ int agl::edgelist_perco_t::get_random_vertex()
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_root(int i)
+int pgl::edgelist_perco_t::get_root(int i)
 {
   while(i != clust_id[i])
   {
@@ -233,7 +233,7 @@ int agl::edgelist_perco_t::get_root(int i)
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_size_largest_perco_component()
+int pgl::edgelist_perco_t::get_size_largest_perco_component()
 {
   // Returns the size of the largest component.
   return *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
@@ -242,7 +242,7 @@ int agl::edgelist_perco_t::get_size_largest_perco_component()
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_size_random_perco_component()
+int pgl::edgelist_perco_t::get_size_random_perco_component()
 {
   return get_component_size( get_random_vertex() );
 }
@@ -250,7 +250,7 @@ int agl::edgelist_perco_t::get_size_random_perco_component()
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::get_size_second_largest_perco_component()
+int pgl::edgelist_perco_t::get_size_second_largest_perco_component()
 {
   // Size of the largest component.
   int max = *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
@@ -279,7 +279,7 @@ int agl::edgelist_perco_t::get_size_second_largest_perco_component()
 
 // =================================================================================================
 // =================================================================================================
-void agl::edgelist_perco_t::load_edgelist(std::string edgelist_filename)
+void pgl::edgelist_perco_t::load_edgelist(std::string edgelist_filename)
 {
   // Name and ID conversion.
   std::map<std::string, int> Name2ID;
@@ -361,7 +361,7 @@ void agl::edgelist_perco_t::load_edgelist(std::string edgelist_filename)
 
 // =================================================================================================
 // =================================================================================================
-void agl::edgelist_perco_t::merge_clusters(std::vector<int> &size)
+void pgl::edgelist_perco_t::merge_clusters(std::vector<int> &size)
 {
   // Variables.
   int v1, v2, v3, v4;

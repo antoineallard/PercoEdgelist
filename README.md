@@ -1,9 +1,9 @@
 ## Percolation on graph
 
-The `percolation_on_graph` class offers many methods to perform and analyze bond percolation on **simple undirected graphs without self-loops**.
+The `edgelist_perco_t` class offers many methods to perform and analyze bond percolation on **simple undirected graphs without self-loops**.
 
 
-The class can be imported directly and is available under the namepace `agl`.
+The class can be imported directly and is available under the namepace `pgl`.
 ```c++
 // Importing the class
 #include "src/edgelist_perco_t.hpp"
@@ -39,7 +39,7 @@ where the vertices's name will be imported as `std::string` and can therefore be
 
 ```c++
 // The graph is loaded at the initialization of the class
-agl::edgelist_perco_t g("<path-to-edgelist-file>");
+pgl::edgelist_perco_t g("<path-to-edgelist-file>");
 ```
 
 
