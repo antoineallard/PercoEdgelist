@@ -14,6 +14,8 @@ The currently available functions are
 * [Generating one instance of a bond percolated graph](#generating-one-instance-of-a-bond-percolated-edgelist)
 * [Properties of the percolated graph](#properties-of-the-percolated-edgelist)
 
+Note that further examples can found in the [validation](https://github.com/antoineallard/percolation_on_edgelist/tree/main/validation) directory.
+
 
 #### Importing a graph from an edgelist file
 
