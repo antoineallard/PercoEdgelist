@@ -1,6 +1,6 @@
 ## Percolation on graph
 
-The percolation_on_graph class offers many methods to perform and analyze bond percolation on **simple undirected graphs without self-loops**.
+The `percolation_on_graph` class offers many methods to perform and analyze bond percolation on **simple undirected graphs without self-loops**.
 
 
 The class can be imported directly and is available under the namepace `agl`.
@@ -14,7 +14,7 @@ The currently available functions are
 * [Generating one instance of a bond percolated graph](#generating-one-instance-of-a-bond-percolated-edgelist)
 * [Properties of the percolated graph](#properties-of-the-percolated-edgelist)
 
-Note that further examples can found in the [validation](https://github.com/antoineallard/percolation_on_edgelist/tree/main/validation) directory.
+Note that further examples on how `percolation_on_graph` can be useed are available in the [validation](https://github.com/antoineallard/percolation_on_edgelist/tree/main/validation) sub-directory.
 
 
 #### Importing a graph from an edgelist file
