@@ -1,10 +1,10 @@
 /*
  *
  *  This code generates the text files used to validate the edgelist_perco_t
- *    and cm_rewiring_t classes of the PGL to analyze the structure of
- *    undirected, unweighted and simple graph.
+ *    class of the AGL to analyze the structure of undirected, unweighted and simple graph.
  *
- *  Compilation: g++ -O3 -std=c++11 generate_validation_data.cpp -o generate_validation_data
+ *  Compilation requires the c++11 standard.
+ *    Example: g++ -O3 -std=c++11 generate_validation_data.cpp -o generate_validation_data
  *
  *  Author:  Antoine Allard
  *  WWW:     antoineallard.info
