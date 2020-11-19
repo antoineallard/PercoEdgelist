@@ -46,7 +46,7 @@
   int width = 15;
 
   // Parameters of the simulations
-  int nb_simulations = 10000;
+  int nb_simulations = 25000;
   double dt = 0.01;
 
   // Writes the header.

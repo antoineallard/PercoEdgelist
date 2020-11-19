@@ -24,7 +24,7 @@ import graph_tool.all as gt
 import numpy as np
 
 # Number of vertices
-nb_vertices = 1000
+nb_vertices = 750
 
 # Expected average degree
 expected_average_degree = 5
@@ -49,7 +49,7 @@ with open("validation_raw_results.dat", "w" ) as f:
     # g.set_fast_edge_removal(True)
     f.write('#   nb_vertices        nb_edges        size_1st        size_2nd         nb_comp\n')
 
-    for i in range(1000):
+    for i in range(5000):
 
         g2 = g.copy()
         g2.set_fast_edge_removal(fast=True)
@@ -75,6 +75,10 @@ with open("validation_raw_results.dat", "w" ) as f:
             if ncomp[e+1] > 1:
                  size2[e+1] = comps[1]
 
-        np.savetxt(f, np.column_stack((np.ones((nb_edges + 1, 1)) * g.num_vertices(), range(nb_edges, -1, -1), size1, size2, ncomp)),
+        np.savetxt(f, np.column_stack((np.ones((nb_edges + 1, 1)) * g2.num_vertices(),
+                                      range(nb_edges, -1, -1),
+                                      size1,
+                                      size2,
+                                      ncomp)),
                    delimiter=' ', encoding='utf-8',
                    fmt='%15d %15d %15d %15d %15d ')
