@@ -9,7 +9,7 @@
  * WWW:     antoineallard.info
  * Date:    Nov. 2020
  *
- * Version 1.0.1
+ * Version 1.1
  *
  *
  * This program is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
  */
 
 // Standard template library
-#include <algorithm> // std::max_element, std::nth_element
+#include <algorithm> // std::max_element, std::count
 #include <cstdlib>   // std::terminate
 #include <ctime>     // std::time(NULL)
 #include <fstream>   // std::ifstream
@@ -101,6 +101,179 @@ agl::edgelist_perco_t::edgelist_perco_t(std::string edgelist_filename)
   engine.seed(std::time(NULL));
   // Initializes the objet prior to percolation runs.
   load_edgelist(edgelist_filename);
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::bond_percolate(double T)
+{
+  // Loads the percolated edgelist.
+  int nb_edges = generate_random_adjacency_list(T);
+  // Finds the distribution of the size of components.
+  find_dist_clust_size();
+  // Returns the number of remaining edges.
+  return nb_edges;
+}
+
+
+// =================================================================================================
+// =================================================================================================
+void agl::edgelist_perco_t::find_dist_clust_size()
+{
+  // Initializes the containers.
+  dist_clust_size.clear();
+  clust_id.clear();
+  clust_id.resize(nb_vertices, 0);
+  // std::vector<int> new_clust_id(nb_vertices, 1);
+  // Starts with every vertex as an isolated cluster.
+  std::vector<int> clust_size(nb_vertices, 1);
+  for(int i=0; i<nb_vertices; i++)
+  {
+    clust_id[i] = i;
+  }
+  // Merges clusters until the minimal set is obtained.
+  // while(clust_id != new_clust_id)
+  // {
+    // new_clust_id = clust_id;
+    merge_clusters(clust_size);
+  // }
+  // Gets the distribution of the size of components.
+  int s_max = *max_element(clust_id.begin(), clust_id.end());
+  clust_size.clear();
+  dist_clust_size.resize(s_max + 1, 0);
+  for(int i(0); i<nb_vertices; ++i)
+  {
+    ++dist_clust_size[get_root(i)];
+  }
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::generate_random_adjacency_list(double T)
+{
+  // Variables.
+  int v1, v2;
+  int nb_edges(0);
+  // Iterators.
+  std::set< std::pair<int, int> >::iterator it, end;
+  // Resets the containers.
+  adjacency_list.clear();
+  adjacency_list.resize(nb_vertices);
+  // Loops over all edges.
+  it = edgelist.begin();
+  end = edgelist.end();
+  for(; it!=end; ++it)
+  {
+    if(uniform_01(engine) < T)
+    {
+      // Identifies the vertices.
+      v1 = it->first;
+      v2 = it->second;
+      // Adds the percolated edge.
+      adjacency_list[v1].push_back(v2);
+      adjacency_list[v2].push_back(v1);
+      // Counts the number of remaining edges.
+      ++nb_edges;
+    }
+  }
+  // Returns the number of remaining edges.
+  return nb_edges;
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_component_size(int v)
+{
+  // Returns the size of the component to which vertex "v" belongs.
+  return dist_clust_size[get_root(v)];
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_nb_components()
+{
+  // Counts the number of components whose "size is not zero".
+  int nb_components = 0;
+  for(int i(0), ii(dist_clust_size.size()); i<ii; ++i)
+  {
+    if(dist_clust_size[i] > 0)
+    {
+      ++nb_components;
+    }
+  }
+  // Returns the number of components.
+  return nb_components;
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_random_vertex()
+{
+  return (int) (uniform_01(engine) * nb_vertices);
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_root(int i)
+{
+  while(i != clust_id[i])
+  {
+    clust_id[i] = clust_id[clust_id[i]];
+    i = clust_id[i];
+  }
+  return i;
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_size_largest_perco_component()
+{
+  // Returns the size of the largest component.
+  return *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_size_random_perco_component()
+{
+  return get_component_size( get_random_vertex() );
+}
+
+
+// =================================================================================================
+// =================================================================================================
+int agl::edgelist_perco_t::get_size_second_largest_perco_component()
+{
+  // Size of the largest component.
+  int max = *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
+  // Checks if the second largest component is of the same size as the largest one.
+  int count = std::count(dist_clust_size.begin(), dist_clust_size.end(), max);
+  if(count > 1)
+  {
+    return max;
+  }
+  // Finds the size of the second largest component.
+  int second_largest_clust_size = 0;
+  for(int i(0), ii(dist_clust_size.size()); i<ii; ++i)
+  {
+    if(dist_clust_size[i] >= second_largest_clust_size)
+    {
+      if(dist_clust_size[i] < max)
+      {
+        second_largest_clust_size = dist_clust_size[i];
+      }
+    }
+  }
+  // Returns the size of the second largest component.
+  return second_largest_clust_size;
 }
 
 
@@ -188,72 +361,6 @@ void agl::edgelist_perco_t::load_edgelist(std::string edgelist_filename)
 
 // =================================================================================================
 // =================================================================================================
-int agl::edgelist_perco_t::generate_random_adjacency_list(double T)
-{
-  // Variables.
-  int v1, v2;
-  int nb_edges(0);
-  // Iterators.
-  std::set< std::pair<int, int> >::iterator it, end;
-  // Resets the containers.
-  adjacency_list.clear();
-  adjacency_list.resize(nb_vertices);
-  // Loops over all edges.
-  it = edgelist.begin();
-  end = edgelist.end();
-  for(; it!=end; ++it)
-  {
-    if(uniform_01(engine) < T)
-    {
-      // Identifies the vertices.
-      v1 = it->first;
-      v2 = it->second;
-      // Adds the percolated edge.
-      adjacency_list[v1].push_back(v2);
-      adjacency_list[v2].push_back(v1);
-      // Counts the number of remaining edges.
-      ++nb_edges;
-    }
-  }
-  // Returns the number of remaining edges.
-  return nb_edges;
-}
-
-
-// =================================================================================================
-// =================================================================================================
-void agl::edgelist_perco_t::find_dist_clust_size()
-{
-  // Initializes the containers.
-  dist_clust_size.clear();
-  clust_id.clear();
-  clust_id.resize(nb_vertices, 0);
-  // std::vector<int> new_clust_id(nb_vertices, 1);
-  // Starts with every vertex as an isolated cluster.
-  std::vector<int> clust_size(nb_vertices, 1);
-  for(int i=0; i<nb_vertices; i++)
-  {
-    clust_id[i] = i;
-  }
-  // Merges clusters until the minimal set is obtained.
-  // while(clust_id != new_clust_id)
-  // {
-    // new_clust_id = clust_id;
-    merge_clusters(clust_size);
-  // }
-  // Gets the distribution of the size of components.
-  int s_max = *max_element(clust_id.begin(), clust_id.end());
-  clust_size.clear();
-  dist_clust_size.resize(s_max + 1, 0);
-  for(int i(0); i<nb_vertices; ++i)
-  {
-    ++dist_clust_size[get_root(i)];
-  }
-}
-
-
-// =================================================================================================
-// =================================================================================================
 void agl::edgelist_perco_t::merge_clusters(std::vector<int> &size)
 {
   // Variables.
@@ -278,104 +385,4 @@ void agl::edgelist_perco_t::merge_clusters(std::vector<int> &size)
       }
     }
   }
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_component_size(int v)
-{
-  // Returns the size of the component to which vertex "v" belongs.
-  return dist_clust_size[get_root(v)];
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_random_vertex()
-{
-  return (int) (uniform_01(engine) * nb_vertices);
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_root(int i)
-{
-  while(i != clust_id[i])
-  {
-    clust_id[i] = clust_id[clust_id[i]];
-    i = clust_id[i];
-  }
-  return i;
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_size_largest_perco_component()
-{
-  // Returns the size of the largest component.
-  return *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_size_random_perco_component()
-{
-  return get_component_size( get_random_vertex() );
-}
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_nb_components()
-{
-  // Counts the number of components whose "size is not zero".
-  int nb_components = 0;
-  for(int i(0), ii(dist_clust_size.size()); i<ii; ++i)
-  {
-    if(dist_clust_size[i] > 0)
-    {
-      ++nb_components;
-    }
-  }
-  // Returns the number of components.
-  return nb_components;
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::get_size_second_largest_perco_component()
-{
-  // Size of the largest component.
-  int max = *std::max_element(dist_clust_size.begin(), dist_clust_size.end());
-  // Finds the size of the second largest component.
-  int second_largest_clust_size = 0;
-  for(int i(0), ii(dist_clust_size.size()); i<ii; ++i)
-  {
-    if(dist_clust_size[i] >= second_largest_clust_size)
-    {
-      if(dist_clust_size[i] < max)
-      {
-        second_largest_clust_size = dist_clust_size[i];
-      }
-    }
-  }
-  // Returns the size of the second largest component.
-  return second_largest_clust_size;
-}
-
-
-// =================================================================================================
-// =================================================================================================
-int agl::edgelist_perco_t::bond_percolate(double T)
-{
-  // Loads the percolated edgelist.
-  int nb_edges = generate_random_adjacency_list(T);
-  // Finds the distribution of the size of components.
-  find_dist_clust_size();
-  // Returns the number of remaining edges.
-  return nb_edges;
 }
