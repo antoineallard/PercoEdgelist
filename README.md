@@ -14,7 +14,7 @@ The currently available functions are
 * [Generating one instance of a bond percolated graph](#generating-one-instance-of-a-bond-percolated-edgelist)
 * [Properties of the percolated graph](#properties-of-the-percolated-edgelist)
 
-Note that further examples on how `percolation_on_graph` can be used are provide in a [notebook](https://github.com/antoineallard/percolation_on_edgelist/blob/main/validation/plot_validation_figures.ipynb) (and related scripts) used to validate the class.
+Note that further examples on how `percolation_on_graph` can be used are provide in a [notebook](https://github.com/antoineallard/percolation_on_edgelist/blob/main/validation/plot_validation_figures.ipynb) (and related scripts in [`validation/`](https://github.com/antoineallard/percolation_on_edgelist/tree/main/validation)) used to validate the class.
 
 
 #### Importing a graph from an edgelist file
