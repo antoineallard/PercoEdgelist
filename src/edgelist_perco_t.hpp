@@ -75,20 +75,20 @@ namespace agl
       edgelist_perco_t(std::string edgelist_filename);
       // Performs bond percolation.
       int bond_percolate(double T);
-      // Finds the number of components.
-      int get_nb_components();
-      // Finds the size of the largest percolation cluster.
-      int get_size_largest_perco_component();
-      // Finds the size of the second largest percolation cluster.
-      int get_size_second_largest_perco_component();
-      // Returns the numerical ID of a randomly chosen vertex.
-      int get_random_vertex();
       // Returns the size of the component to which vertex "v" belongs.
       int get_component_size(int v);
-      // Returns the size of the component to which a random vertex belongs.
-      int get_size_random_perco_component();
+      // Finds the number of components.
+      int get_nb_components();
       // Returns the number of vertices in the graph.
       int get_nb_vertices() {return nb_vertices;};
+      // Returns the numerical ID of a randomly chosen vertex.
+      int get_random_vertex();
+      // Finds the size of the largest percolation cluster.
+      int get_size_largest_perco_component();
+      // Returns the size of the component to which a random vertex belongs.
+      int get_size_random_perco_component();
+      // Finds the size of the second largest percolation cluster.
+      int get_size_second_largest_perco_component();
   };
 }
 
