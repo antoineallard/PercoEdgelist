@@ -1,6 +1,6 @@
 ## Percolation on graph
 
-The `edgelist_perco_t` class offers many methods to perform and analyze bond percolation on **simple undirected graphs without self-loops**.
+The `edgelist_perco_t` class offers many methods to perform and analyze bond percolation on **simple unweighted undirected graphs without self-loops**.
 
 
 The class can be imported directly and is available under the namepace `pgl`.
@@ -9,12 +9,12 @@ The class can be imported directly and is available under the namepace `pgl`.
 #include "src/edgelist_perco_t.hpp"
 ```
 
-The currently available functions are
+The currently available methods can be distinguished into three categories
 * [Importing a graph from an edgelist file](#importing-a-graph-from-an-edgelist-file)
 * [Generating one instance of a bond percolated graph](#generating-one-instance-of-a-bond-percolated-edgelist)
 * [Properties of the percolated graph](#properties-of-the-percolated-edgelist)
 
-Note that further examples on how to use `edgelist_perco_t` are also provided in a [notebook](https://github.com/antoineallard/percolation_on_edgelist/blob/main/validation/plot_validation_figures.ipynb) (see also related scripts in [`validation/`](https://github.com/antoineallard/percolation_on_edgelist/tree/main/validation)) used to validate the class.
+Note that further examples on how to use `edgelist_perco_t` can be found in a notebook (and related scripts) used to validate the class.
 
 
 #### Importing a graph from an edgelist file
@@ -33,9 +33,9 @@ A graph can be imported from a file containing its edgelist (one edge per line).
 [name of vertex7]  [name of vertex6]  [remaining information will be ignored]
 ...
 ```
-where the vertices's name will be imported as `std::string` and can therefore be virtually anything as long as they do not include white spaces (i.e., there is not need for the vertices to be identified by contiguous integers).
+Note that the vertices' name will be imported as `std::string` and can therefore be virtually anything as long as they do not include white spaces (i.e., there is not need for the vertices to be identified by contiguous integers).
 
-**IMPORTANT**: this class only considers **simple** **undirected** graphs **without self-loops**. Any multiple edges (e.g., if the graph is originally directed) or self-loops will be ignored.
+**IMPORTANT**: this class only considers **simple unweighted undirected graphs without self-loops**. Any multiple edges or self-loops in the edgelist file will be ignored.
 
 ```c++
 // The graph is loaded at the initialization of the class
@@ -44,6 +44,8 @@ pgl::edgelist_perco_t g("<path-to-edgelist-file>");
 
 
 #### Generating one instance of a bond percolated edgelist
+
+This method creates a provisional edgelist in which each edge has been kept with the probability passed as an argument.  The connected components are then identified using a [weighted union-find with path compression algorithm][1].
 
 ```c++
 // Generates an instance of the original graph in which each edge has been
@@ -55,7 +57,7 @@ int number_of_remaining_edges = g.bond_percolate(0.6);
 
 #### Properties of the percolated edgelist
 
-Once a percolated instance has been generated, various properties can be extracted
+Once a percolated instance has been generated, various information about its components can be extracted
 
 ```c++
 // Size of the connected component to which vertex "v" belongs.
@@ -79,3 +81,5 @@ int size_random_perco_component = g.get_size_random_perco_component();
 // Size of the second largest connected component.
 int size_second_largest_perco_component = g.get_size_second_largest_perco_component();
 ```
+
+[1]: https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
