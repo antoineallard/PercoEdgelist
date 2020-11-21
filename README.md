@@ -17,7 +17,7 @@ The currently available methods can be distinguished into three categories
 Note that further examples on how to use `edgelist_perco_t` can be found in a notebook (and related scripts) used to validate the class.
 
 
-#### Importing a graph from an edgelist file
+### Importing a graph from an edgelist file
 
 A graph can be imported from a file containing its edgelist (one edge per line). The edgelist file consists in a simple text file with the following convention
 
@@ -43,7 +43,7 @@ pgl::edgelist_perco_t g("<path-to-edgelist-file>");
 ```
 
 
-#### Generating one instance of a bond percolated edgelist
+### Generating one instance of a bond percolated edgelist
 
 This method creates a provisional edgelist in which each edge has been kept with the probability passed as an argument.  The connected components are then identified using a [weighted union-find with path compression algorithm][1].
 
@@ -55,7 +55,7 @@ int number_of_remaining_edges = g.bond_percolate(0.6);
 ```
 
 
-#### Properties of the percolated edgelist
+### Properties of the percolated edgelist
 
 Once a percolated instance has been generated, various information about its components can be extracted
 
